@@ -23,6 +23,7 @@ class MyDrawer extends StatelessWidget {
                 trailing: new Icon(Icons.grid_on),
                 onTap: () => Navigator.of(context).pushNamed('/home')
               ),
+              new Divider(),
               new ListTile(
                 title: new Text("Spaces"),
                 trailing: new Icon(Icons.home),

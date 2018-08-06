@@ -3,6 +3,9 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
+import '../utils/drawer.dart';
+import './home_data.dart';
+
 class SpecificData extends StatefulWidget {
   final String type;
   SpecificData(this.type);
@@ -50,11 +53,11 @@ class SpecificDataState extends State<SpecificData> {
   Icon getIconAssociatedToType() {
     Icon iconToReturn;
 
-    if(type == "space") {
+    if(type == "spaces") {
       iconToReturn = Icon(Icons.home);
-    } else if(type == "collection") {
+    } else if(type == "collections") {
       iconToReturn =  Icon(Icons.book);
-    } else if(type == "dataset") {
+    } else if(type == "datasets") {
       iconToReturn = Icon(Icons.folder);
     } else {
       iconToReturn = Icon(Icons.file_download);
@@ -75,15 +78,28 @@ class SpecificDataState extends State<SpecificData> {
           children: <Widget>[
             ListTile(
               leading: getIconAssociatedToType(),
-              title: Text(data[type=="collections" ? "collectionname" : "name"], style: new TextStyle(fontWeight: FontWeight.bold)),
-              subtitle: Text(type.substring(0, type.length - 1).toString().toUpperCase()),
+              title: Text(
+                data[type=="collections" ? "collectionname" : "name"], 
+                style: new TextStyle(fontWeight: FontWeight.bold), 
+                overflow: TextOverflow.ellipsis
+              ),
+              subtitle: Text(
+                type.substring(0, type.length - 1).toString().toUpperCase(),
+                style: new TextStyle(fontSize: 12.0)
+              ),
             ),
             new ButtonTheme.bar( // make buttons use the appropriate styles for cards
               child: new ButtonBar(
                 children: <Widget>[
                   new FlatButton(
                     child: Text('EXPLORE', style: new TextStyle(color: Colors.redAccent)),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                      context, 
+                      new MaterialPageRoute(
+                        builder: (BuildContext context) => new DisplayData(type.substring(0, type.length - 1).toString(), data["id"])
+                        ));
+                      },
                   ),
                 ],
               ),
@@ -96,18 +112,25 @@ class SpecificDataState extends State<SpecificData> {
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      padding: EdgeInsets.only(top: 20.0),
-      color: Colors.white10,
-      child: new GridView.count(
-          primary: true,
-          padding: EdgeInsets.all(15.0),
-          crossAxisCount: 2,
-          childAspectRatio: 1.3,
-          children: List.generate(data == null ? 0 : data.length, (index) {
-            return buildCard(data[index]);
-          }),
-
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text(
+          type.toString().toUpperCase()), 
+          backgroundColor: Colors.redAccent,
+        ),
+      drawer: new MyDrawer(),
+      body: new Container(
+        padding: EdgeInsets.only(top: 20.0),
+        color: Colors.white10,
+        child: new GridView.count(
+            primary: true,
+            padding: EdgeInsets.all(15.0),
+            crossAxisCount: 2,
+            childAspectRatio: 1.3,
+            children: List.generate(data == null ? 0 : data.length, (index) {
+              return buildCard(data[index]);
+            }),
+        )
       )
     );
   }

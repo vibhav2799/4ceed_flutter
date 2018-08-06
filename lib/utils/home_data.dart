@@ -2,21 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-
+import '../utils/drawer.dart';
 
 class DisplayData extends StatefulWidget {
+  final String givenType, givenId;
+
+  DisplayData(this.givenType, this.givenId);
+
    @override
-    State createState() => DisplayDataState();
+    State createState() => DisplayDataState(givenType, givenId);
 }
 
 class DisplayDataState extends State<DisplayData> {
+  String givenType, givenId;
   List data;
+  DisplayDataState(this.givenType, this.givenId);
 
   Future<String> getData(String nodeType, String parentId) async {
     String username = 'vibhavk2@illinois.edu';
     String password = 'Vibhav27\$';
-    String basicAuth =
-      'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$username:$password'));
 
     http.Response response = await http.get('http://127.0.0.1:9000/api/fulltree/getChildrenOfNode?nodeType='+nodeType+
       '&nodeId='+parentId,
@@ -30,8 +35,13 @@ class DisplayDataState extends State<DisplayData> {
     }
     );
 
+    print(response.body);
     this.setState( () {
-      data = jsonDecode(response.body);
+      if(response.body == "not implemented") {
+        data = ["400"];
+      } else {
+        data = jsonDecode(response.body);
+      }
     });
 
     return "Success";
@@ -39,7 +49,11 @@ class DisplayDataState extends State<DisplayData> {
 
   @override
   void initState() {
-    this.getData('root', '');
+    if (givenId == '' && givenType == '') {
+      this.getData('root', '');
+    } else {
+      this.getData(givenType, givenId);
+    }
   }
 
   Icon getIconAssociatedToType(String type) {
@@ -71,14 +85,19 @@ class DisplayDataState extends State<DisplayData> {
             ListTile(
               leading: getIconAssociatedToType(data["type"]),
               title: Text(data["value"], overflow: TextOverflow.ellipsis, style: new TextStyle(fontWeight: FontWeight.bold)),
-              subtitle: Text(data["type"].toString().toUpperCase(), overflow: TextOverflow.ellipsis),
+              subtitle: Text(
+                data["type"].toString().toUpperCase(), 
+                style : new TextStyle(fontSize: 12.0),
+                overflow: TextOverflow.ellipsis),
             ),
             new ButtonTheme.bar( // make buttons use the appropriate styles for cards
               child: new ButtonBar(
                 children: <Widget>[
                   new FlatButton(
                     child: Text('EXPLORE', style: new TextStyle(color: Colors.redAccent)),
-                    onPressed: () {this.getData(data["type"], data["id"]);},
+                    onPressed: () {
+                      this.getData(data["type"], data["id"]);
+                      },
                   ),
                 ],
               ),
@@ -91,19 +110,26 @@ class DisplayDataState extends State<DisplayData> {
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      padding: EdgeInsets.only(top: 20.0),
-      color: Colors.white10,
-      child: new GridView.count(
-          primary: true,
-          padding: EdgeInsets.all(15.0),
-          crossAxisCount: 2,
-          childAspectRatio: 1.3,
-          children: List.generate(data == null ? 0 : data.length, (index) {
-            return buildCard(data[index]);
-          }),
+    return new Scaffold(
+        appBar: new AppBar(
+          title: new Text('4CeeD Home'), 
+          backgroundColor: Colors.redAccent,
+          ),
+        drawer: new MyDrawer(),
+        body: new Container(
+          padding: EdgeInsets.only(top: 20.0),
+          color: Colors.white10,
+          child: new GridView.count(
+              primary: true,
+              padding: EdgeInsets.all(15.0),
+              crossAxisCount: 2,
+              childAspectRatio: 1.3,
+              children: List.generate(data == null ? 0 : data.length, (index) {
+                return buildCard(data[index]);
+              }),
 
       )
+    )
     );
   }
 
