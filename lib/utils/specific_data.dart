@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
+import './user_info.dart';
 import '../utils/drawer.dart';
 import './home_data.dart';
 
@@ -22,14 +23,10 @@ class SpecificDataState extends State<SpecificData> {
 
 
   Future<String> getData() async {
-    String username = 'vibhavk2@illinois.edu';
-    String password = 'Vibhav27\$';
-    String basicAuth =
-      'Basic ' + base64Encode(utf8.encode('$username:$password'));
 
-    http.Response response = await http.get('http://127.0.0.1:9000/api/'+type,
+    http.Response response = await http.get(serverAddress+'/api/'+type,
     headers: {
-      "Authorization": basicAuth,
+      "Authorization": auth,
       "Content-Type": "application/json",
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Methods": "*",
@@ -126,7 +123,7 @@ class SpecificDataState extends State<SpecificData> {
             primary: true,
             padding: EdgeInsets.all(15.0),
             crossAxisCount: 2,
-            childAspectRatio: 1.3,
+            childAspectRatio: 1.2,
             children: List.generate(data == null ? 0 : data.length, (index) {
               return buildCard(data[index]);
             }),

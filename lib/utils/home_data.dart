@@ -3,6 +3,9 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import '../utils/drawer.dart';
+import './user_info.dart';
+import '../pages/file_preview.dart';
+
 
 class DisplayData extends StatefulWidget {
   final String givenType, givenId;
@@ -19,14 +22,10 @@ class DisplayDataState extends State<DisplayData> {
   DisplayDataState(this.givenType, this.givenId);
 
   Future<String> getData(String nodeType, String parentId) async {
-    String username = 'vibhavk2@illinois.edu';
-    String password = 'Vibhav27\$';
-    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$username:$password'));
-
-    http.Response response = await http.get('http://127.0.0.1:9000/api/fulltree/getChildrenOfNode?nodeType='+nodeType+
+    http.Response response = await http.get(serverAddress+'/api/fulltree/getChildrenOfNode?nodeType='+nodeType+
       '&nodeId='+parentId,
     headers: {
-      "Authorization": basicAuth,
+      "Authorization": auth,
       "Content-Type": "application/json",
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Methods": "*",
@@ -53,7 +52,7 @@ class DisplayDataState extends State<DisplayData> {
       this.getData('root', '');
     } else {
       this.getData(givenType, givenId);
-    }
+    } 
   }
 
   Icon getIconAssociatedToType(String type) {
@@ -96,7 +95,11 @@ class DisplayDataState extends State<DisplayData> {
                   new FlatButton(
                     child: Text('EXPLORE', style: new TextStyle(color: Colors.redAccent)),
                     onPressed: () {
-                      this.getData(data["type"], data["id"]);
+                      if(data["type"] != "file") {
+                        this.getData(data["type"], data["id"]);
+                      } else {
+                        Navigator.of(context).pushNamed('/preview');
+                      }
                       },
                   ),
                 ],
@@ -123,7 +126,7 @@ class DisplayDataState extends State<DisplayData> {
               primary: true,
               padding: EdgeInsets.all(15.0),
               crossAxisCount: 2,
-              childAspectRatio: 1.3,
+              childAspectRatio: 1.2,
               children: List.generate(data == null ? 0 : data.length, (index) {
                 return buildCard(data[index]);
               }),

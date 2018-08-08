@@ -22,7 +22,7 @@ class SignIn extends StatefulWidget {
 
 class SignInState extends State<SignIn> {
   GoogleSignInAccount _currentUser;
-  String emailText="" , passwordText="";
+  String emailText = "", passwordText = "";
   bool isValid = false;
   bool triedLoggingIn = false;
 
@@ -36,10 +36,38 @@ class SignInState extends State<SignIn> {
       if (_currentUser != null) {
         _buildBody();
       }
-      
     });
 
     //_googleSignIn.signInSilently();
+  }
+
+  Future<Null> _handleLocalSignIn() async {
+    triedLoggingIn = true;
+
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$emailText:$passwordText'));
+    http.Response response = await http.get(
+        serverAddress+'/api/fulltree/getChildrenOfNode?nodeType=root',
+        headers: {
+          "Authorization": basicAuth,
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": "true",
+          "Access-Control-Allow-Methods": "*",
+          "Content-Encoding": "gzip",
+          "Access-Control-Allow-Origin": "*"
+        });
+
+    if (response.statusCode == 200) {
+      setState(() {
+        isValid = true;
+        email = emailText;
+        auth = basicAuth;
+      });
+    } else {
+      setState(() {
+        isValid = false;
+      });
+    }
   }
 
   Future<Null> _handleSignIn() async {
@@ -52,69 +80,47 @@ class SignInState extends State<SignIn> {
     }
   }
 
-  Future<Null> _handleLocalSignIn() async {
-    triedLoggingIn = true;
-    
-    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$emailText:$passwordText'));
-    http.Response response = await http.get('http://127.0.0.1:9000/api/fulltree/getChildrenOfNode?nodeType=root',
-
-    headers: {
-      "Authorization": basicAuth,
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Credentials": "true",
-      "Access-Control-Allow-Methods": "*",
-      "Content-Encoding": "gzip",
-      "Access-Control-Allow-Origin": "*"
-    }
-    );
-
-    if(response.statusCode == 200) {
-      setState(() {
-        isValid = true;
-      });
-    } else {
-      setState(() {
-        isValid = false;
-      });
-    }
-  }
-
   Future<Null> _handleSignOut() async {
     _googleSignIn.disconnect();
   }
 
   Widget _buildBody() {
-    final logo = new Image.asset('images/atom_white.png', width: 270.0, height: 90.0,);
-    
+    final logo = new Image.asset(
+      'images/atom_white.png',
+      width: 150.0,
+      height: 50.0,
+    );
+
     final email = new TextField(
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       style: TextStyle(color: Colors.white70),
       decoration: InputDecoration(
-          hintText: 'Email',
-          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        hintText: 'Email',
+        hintStyle: new TextStyle(color: Colors.white30),
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
       ),
       onChanged: (String str) {
         setState(() {
-        emailText = str;
-      });
+          emailText = str;
+        });
       },
     );
 
     final password = new TextField(
-      obscureText: true,
-      autofocus: false,
-      style: TextStyle(color: Colors.white70),
-      decoration: InputDecoration(
+        obscureText: true,
+        autofocus: false,
+        style: TextStyle(color: Colors.white70),
+        decoration: InputDecoration(
           hintText: 'Password',
+          hintStyle: new TextStyle(color: Colors.white30),
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-      ),
-      onChanged: (String str) {
-        setState(() {
-        passwordText = str;
-      });
-      }
-    );
+        ),
+        onChanged: (String str) {
+          setState(() {
+            passwordText = str;
+          });
+        });
 
     final loginButton = new Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -131,15 +137,20 @@ class SignInState extends State<SignIn> {
       ),
     );
 
-    final message = new Text(!isValid && triedLoggingIn ? "Invalid Credentials Entered! Try Again!" : "",
-    
+    final message = new Text(
+      !isValid && triedLoggingIn
+          ? "Invalid Credentials Entered!"
+          : "",
+      style:
+          new TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+      textAlign: TextAlign.center,
     );
 
     if (_currentUser != null || isValid) {
       return new DisplayData('', '');
     } else {
       return Scaffold(
-        backgroundColor: Colors.black54,
+        backgroundColor: Colors.black87,
         body: Center(
           child: ListView(
             shrinkWrap: true,
@@ -154,6 +165,8 @@ class SignInState extends State<SignIn> {
               password,
               SizedBox(height: 24.0),
               loginButton,
+              const Text("OR", textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
+              SizedBox(height: 14.0),
               new FlatButton(
                 child: Image(
                     image: new AssetImage('images/google_sign_in.png'),
@@ -165,7 +178,6 @@ class SignInState extends State<SignIn> {
           ),
         ),
       );
-      
     }
   }
 
