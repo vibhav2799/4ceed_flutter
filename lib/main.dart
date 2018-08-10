@@ -4,6 +4,7 @@ import './pages/splash_screen.dart';
 import './utils/home_data.dart';
 import './utils/specific_data.dart';
 import './pages/file_preview.dart';
+import './pages/create_new.dart';
 
 // Main controller to run 4ceed_app
 void main() {
@@ -25,7 +26,6 @@ class App extends StatelessWidget {
         '/specific-data-spaces': (BuildContext context) => new SpecificData('spaces'),
         '/specific-data-collections': (BuildContext context) => new SpecificData('collections'),
         '/specific-data-datasets': (BuildContext context) => new SpecificData('datasets'),
-        '/preview': (BuildContext context) => new PreviewFile(),
       }
     );
   }

@@ -20,7 +20,8 @@ class _MyAppState extends State<MySplashScreen> {
         fontSize: 30.0,
         color: Colors.white
       ),),
-      imageNetwork: 'https://4ceed.illinois.edu/assets/images/atom_white.png',
+      image: new Image.asset(
+      'images/atom_white.png'),
       backgroundColor: Colors.black,
       styleTextUnderTheLoader: new TextStyle(),
       photoSize: 100.0,

@@ -7,6 +7,9 @@ dependencies:
   splashscreen: ^0.0.7
   material_search: ^0.2.7
   open_file: ^1.0.5
+  path_provider: ^0.4.1
+
+
   flutter:
     sdk: flutter
 
@@ -37,6 +40,7 @@ flutter:
   assets:
     - images/atom_white.png
     - images/google_sign_in.png
+    - images/drawer_background.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

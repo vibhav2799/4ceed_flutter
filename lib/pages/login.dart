@@ -157,9 +157,9 @@ class SignInState extends State<SignIn> {
             padding: EdgeInsets.only(left: 24.0, right: 24.0),
             children: <Widget>[
               logo,
-              SizedBox(height: 48.0),
+              new Padding(padding: EdgeInsets.only(top: 20.0)),
               message,
-              new Padding(padding: EdgeInsets.only(bottom: 40.0)),
+              new Padding(padding: EdgeInsets.only(bottom: 20.0)),
               email,
               SizedBox(height: 8.0),
               password,
