@@ -11,13 +11,48 @@ class PreviewFile extends StatelessWidget {
   final String fileId;
   PreviewFile(this.fileId);
 
-  String _localPath;
+  getFilePreviewUrl() async {
+    http.Response response = await http.get(serverAddress+"/api/files/previewJson/"+fileId, headers: {
+      "Authorization": auth,
+    });
 
-  fetchPdf() async {
-    final directory = await getApplicationDocumentsDirectory();
-    _localPath = directory.path;
+    var data = jsonDecode(response.body);
+    if(response.statusCode == 200) {
+      return data;
+    } else {
+      throw Exception("Failed");
+    }
     
-    http.Response response = await http.get(serverAddress+'/api/files/'+fileId, headers: {
+  }
+
+
+  Future<Widget> getBodyWidget() async {
+    var data = await getFilePreviewUrl();
+    //var decodedData = jsonDecode(http.Response.body);
+    if(data["content-type"] == "application/pdf") {
+      return new FlatButton(onPressed: () => fetchPdf(data["id"], data["filename"]), 
+        child: Text('OPEN PDF', 
+        style: new TextStyle(color: Colors.redAccent))
+      );
+    } else if (data["previewsWithPreview"]=="/blob") {
+      return new Image.network(serverAddress+'/api/files/'+fileId, 
+      headers: {
+      "Authorization": auth,
+    });
+    } else {
+      return new Image.network(serverAddress+data["previewsWithPreview"], 
+      headers: {
+      "Authorization": auth,
+    });
+    }
+  }
+
+  fetchPdf(fileId, fileName) async {
+    final directory = await getApplicationDocumentsDirectory();
+    String _localPath = directory.path;
+    
+    http.Response response = await http.get(serverAddress+"/api/files/"+fileId, headers: {
+      //serverAddress+'/api/files/'+fileId, headers: {
       "Authorization": auth,
       "Content-Type": "application/json",
       "Accept": "application/json",
@@ -26,14 +61,11 @@ class PreviewFile extends StatelessWidget {
       "Content-Encoding": "gzip",
       "Access-Control-Allow-Origin": "*"
     });
-    final File file = new File("$_localPath/output.pdf");
+    final File file = new File("$_localPath/"+fileName);
     await file.writeAsBytes(response.bodyBytes);
 
     OpenFile.open(file.path);
   }
-
-
-//http://127.0.0.1:9000/api/files/5b4f9eeae84a34d772377758
 
   @override
   Widget build(BuildContext context) {
@@ -42,19 +74,17 @@ class PreviewFile extends StatelessWidget {
         title: new Text('4CeeD Home'),
         backgroundColor: Colors.redAccent,
       ),
-      body: new FlatButton(onPressed: () => fetchPdf(), child: Text('EXPLORE', style: new TextStyle(color: Colors.redAccent)),),
       
-      //Image.network('http://127.0.0.1:9000/api/previews/5b6882862f6c802673f902ee', 
-    //   headers: {
-    //   "Authorization": auth,
-    //   "Content-Type": "application/json",
-    //   "Accept": "application/json",
-    //   "Access-Control-Allow-Credentials": "true",
-    //   "Access-Control-Allow-Methods": "*",
-    //   "Content-Encoding": "gzip",
-    //   "Access-Control-Allow-Origin": "*",
-    //   "Transfer-Encoding" : "chunked"
-    // }
+      body: new FutureBuilder(
+                  future: getBodyWidget(),
+                  builder: (BuildContext context, AsyncSnapshot <Widget> bodyWidget) {
+                    if(!bodyWidget.hasData) {
+                      return new Container(child: CircularProgressIndicator(), alignment: Alignment.center);
+                    } else {
+                      return bodyWidget.data;
+                    }
+                  }
+    )
     );
   }
 }

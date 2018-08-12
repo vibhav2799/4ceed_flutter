@@ -4,11 +4,11 @@ import './user_info.dart';
 
 class MenuButton extends StatefulWidget {
   final VoidCallback onPressedFunction;
-  String type;
+  final String type;
   final String id;
 
   // Here I am receiving the function in constructor as params
-  MenuButton(this.onPressedFunction, type, id);
+  MenuButton(this.onPressedFunction, this.type, this.id);
 
   @override
   _MenuButtonState createState() => _MenuButtonState();
