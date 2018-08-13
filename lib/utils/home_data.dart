@@ -6,6 +6,7 @@ import '../utils/drawer.dart';
 import './user_info.dart';
 import '../pages/file_preview.dart';
 import './action_button.dart';
+import '../pages/empty.dart';
 
 class DisplayData extends StatefulWidget {
   final String givenType, givenId;
@@ -46,6 +47,10 @@ class DisplayDataState extends State<DisplayData> {
         data = jsonDecode(response.body);
       }
     });
+    // print(data);
+    // if(data.length == 0) {
+    //   Navigator.of(context).pushNamed('/data-not-found');
+    // }
 
     return "Success";
   }
@@ -67,13 +72,19 @@ class DisplayDataState extends State<DisplayData> {
     Icon iconToReturn;
 
     if (type == "space") {
-      iconToReturn = Icon(Icons.home);
+      iconToReturn = Icon(
+        Icons.home,
+        color: Colors.indigoAccent,
+      );
     } else if (type == "collection") {
-      iconToReturn = Icon(Icons.book);
+      iconToReturn = Icon(Icons.book, color: Colors.black);
     } else if (type == "dataset") {
-      iconToReturn = Icon(Icons.folder);
+      iconToReturn = Icon(Icons.folder, color: Colors.blueGrey);
     } else {
-      iconToReturn = Icon(Icons.file_download);
+      iconToReturn = Icon(
+        Icons.file_download,
+        color: Colors.tealAccent,
+      );
     }
 
     return iconToReturn;
@@ -82,7 +93,7 @@ class DisplayDataState extends State<DisplayData> {
   Card buildCard(var data) {
     var customCard = new Card(
       elevation: 5.0,
-      margin: EdgeInsets.all(2.0),
+      margin: EdgeInsets.all(4.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
       ),
@@ -93,34 +104,24 @@ class DisplayDataState extends State<DisplayData> {
             leading: getIconAssociatedToType(data["type"]),
             title: Text(data["value"],
                 overflow: TextOverflow.ellipsis,
-                style: new TextStyle(fontWeight: FontWeight.bold)),
+                style:
+                    new TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0)),
             subtitle: Text(data["type"].toString().toUpperCase(),
                 style: new TextStyle(fontSize: 12.0),
                 overflow: TextOverflow.ellipsis),
-          ),
-          new ButtonTheme.bar(
-            // make buttons use the appropriate styles for cards
-            child: new ButtonBar(
-              children: <Widget>[
-                new FlatButton(
-                  child: Text('EXPLORE',
-                      style: new TextStyle(color: Colors.redAccent)),
-                  onPressed: () {
-                    currentType = data["type"];
-                    currentId = data["id"];
-                    if (data["type"] != "file") {
-                      this.getData(data["type"], data["id"]);
-                    } else {
-                      Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  new PreviewFile(data["id"])));
-                    }
-                  },
-                ),
-              ],
-            ),
+            onTap: () {
+              currentType = data["type"];
+              currentId = data["id"];
+              if (data["type"] != "file") {
+                this.getData(data["type"], data["id"]);
+              } else {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            new PreviewFile(data["id"])));
+              }
+            },
           ),
         ],
       ),
@@ -145,20 +146,22 @@ class DisplayDataState extends State<DisplayData> {
       drawer: new MyDrawer(),
       body: new Opacity(
           opacity: isOpened ? 0.3 : 1.0,
-          child: Container(
-              padding: EdgeInsets.only(top: 20.0),
-              color: Colors.white10,
-              child: new GridView.count(
-                primary: true,
-                padding: EdgeInsets.all(15.0),
-                crossAxisCount: 2,
-                childAspectRatio: 1.2,
-                children:
-                    List.generate(data == null ? 0 : data.length, (index) {
-                  return buildCard(data[index]);
-                }),
-              ))),
-      floatingActionButton: new MenuButton(toggle, currentType, currentId),
+          child: data != null && data.length == 0
+              ? new EmptyData()
+              : Container(
+                  padding: EdgeInsets.only(top: 20.0),
+                  color: Colors.white10,
+                  child: new GridView.count(
+                    primary: true,
+                    padding: EdgeInsets.all(15.0),
+                    crossAxisCount: 2,
+                    childAspectRatio: 2.0,
+                    children:
+                        List.generate(data == null ? 0 : data.length, (index) {
+                      return buildCard(data[index]);
+                    }),
+                  ))),
+      floatingActionButton: new MenuButton(toggle, currentType, currentId, context),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }

@@ -50,14 +50,14 @@ class SpecificDataState extends State<SpecificData> {
   Icon getIconAssociatedToType() {
     Icon iconToReturn;
 
-    if(type == "spaces") {
-      iconToReturn = Icon(Icons.home);
-    } else if(type == "collections") {
-      iconToReturn =  Icon(Icons.book);
-    } else if(type == "datasets") {
-      iconToReturn = Icon(Icons.folder);
+    if (type == "spaces") {
+      iconToReturn = Icon(Icons.home, color: Colors.indigoAccent,);
+    } else if (type == "collections") {
+      iconToReturn = Icon(Icons.book, color: Colors.black);
+    } else if (type == "datasets") {
+      iconToReturn = Icon(Icons.folder, color: Colors.blueGrey);
     } else {
-      iconToReturn = Icon(Icons.file_download);
+      iconToReturn = Icon(Icons.file_download, color: Colors.tealAccent,);
     }
 
     return iconToReturn;
@@ -84,22 +84,14 @@ class SpecificDataState extends State<SpecificData> {
                 type.substring(0, type.length - 1).toString().toUpperCase(),
                 style: new TextStyle(fontSize: 12.0)
               ),
-            ),
-            new ButtonTheme.bar( // make buttons use the appropriate styles for cards
-              child: new ButtonBar(
-                children: <Widget>[
-                  new FlatButton(
-                    child: Text('EXPLORE', style: new TextStyle(color: Colors.redAccent)),
-                    onPressed: () {
-                      Navigator.push(
+              onTap: () {
+                Navigator.push(
                       context, 
                       new MaterialPageRoute(
                         builder: (BuildContext context) => new DisplayData(type.substring(0, type.length - 1).toString(), data["id"])
                         ));
-                      },
-                  ),
-                ],
-              ),
+
+              }
             ),
           ],
         ),
@@ -123,7 +115,7 @@ class SpecificDataState extends State<SpecificData> {
             primary: true,
             padding: EdgeInsets.all(15.0),
             crossAxisCount: 2,
-            childAspectRatio: 1.2,
+            childAspectRatio: 2.0,
             children: List.generate(data == null ? 0 : data.length, (index) {
               return buildCard(data[index]);
             }),

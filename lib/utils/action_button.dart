@@ -3,19 +3,25 @@ import '../pages/create_new.dart';
 import './user_info.dart';
 
 class MenuButton extends StatefulWidget {
+  final BuildContext dataContext;
   final VoidCallback onPressedFunction;
   final String type;
   final String id;
 
   // Here I am receiving the function in constructor as params
-  MenuButton(this.onPressedFunction, this.type, this.id);
+  MenuButton(this.onPressedFunction, this.type, this.id, this.dataContext);
 
   @override
-  _MenuButtonState createState() => _MenuButtonState();
+  _MenuButtonState createState() => _MenuButtonState(this.dataContext, this.id);
 }
 
 class _MenuButtonState extends State<MenuButton>
     with SingleTickerProviderStateMixin {
+
+  final BuildContext dataContext;
+  final String id;
+
+  _MenuButtonState(this.dataContext, this.id);
 
   bool isOpened = false;
   AnimationController _animationController;
@@ -73,7 +79,6 @@ class _MenuButtonState extends State<MenuButton>
       _animationController.reverse();
     }
     isOpened = !isOpened;
-    print(isOpened);
   }
 
   Widget getOpenActionContainer(type, icon) {
@@ -82,9 +87,9 @@ class _MenuButtonState extends State<MenuButton>
         child: FloatingActionButton.extended(
         heroTag: null,
         onPressed: () => Navigator.push(
-                        context, 
+                        dataContext, 
                         new MaterialPageRoute(
-                          builder: (BuildContext context) => new CreateForm(type)
+                          builder: (BuildContext context) => new CreateForm(type, id)
                           )),
         tooltip: 'Create '+type,
         icon: Icon(icon),
@@ -98,9 +103,9 @@ class _MenuButtonState extends State<MenuButton>
       child: FloatingActionButton(
         heroTag: null,
         onPressed: () => Navigator.push(
-                        context, 
+                        dataContext, 
                         new MaterialPageRoute(
-                          builder: (BuildContext context) => new CreateForm(type, )
+                          builder: (BuildContext context) => new CreateForm(type, id)
                           )),
         tooltip: 'Create '+type,
         child: Icon(icon),
