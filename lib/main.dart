@@ -4,7 +4,6 @@ import './pages/splash_screen.dart';
 import './utils/home_data.dart';
 import './utils/specific_data.dart';
 import './pages/empty.dart';
-import './utils/spaces_list_dropdown.dart';
 
 // Main controller to run 4ceed_app
 void main() {

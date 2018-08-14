@@ -59,12 +59,10 @@ class DisplayDataState extends State<DisplayData> {
   void initState() {
     if (givenId == '' && givenType == '') {
       this.getData('root', '');
-      currentType = 'root';
-      currentId = givenId;
+
     } else {
       this.getData(givenType, givenId);
-      currentType = givenType;
-      currentId = givenId;
+
     }
   }
 
@@ -110,8 +108,14 @@ class DisplayDataState extends State<DisplayData> {
                 style: new TextStyle(fontSize: 12.0),
                 overflow: TextOverflow.ellipsis),
             onTap: () {
-              currentType = data["type"];
-              currentId = data["id"];
+              
+              this.setState((){
+                currentType = data["type"];
+                currentId = data["id"];
+              });
+
+              print("test: "+currentId);
+
               if (data["type"] != "file") {
                 this.getData(data["type"], data["id"]);
               } else {

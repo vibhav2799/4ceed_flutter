@@ -12,17 +12,11 @@ class MenuButton extends StatefulWidget {
   MenuButton(this.onPressedFunction, this.type, this.id, this.dataContext);
 
   @override
-  _MenuButtonState createState() => _MenuButtonState(this.dataContext, this.id);
+  _MenuButtonState createState() => _MenuButtonState();
 }
 
 class _MenuButtonState extends State<MenuButton>
     with SingleTickerProviderStateMixin {
-
-  final BuildContext dataContext;
-  final String id;
-
-  _MenuButtonState(this.dataContext, this.id);
-
   bool isOpened = false;
   AnimationController _animationController;
   Animation<Color> _buttonColor;
@@ -72,6 +66,7 @@ class _MenuButtonState extends State<MenuButton>
   }
 
   animate() {
+    print(widget.id);
     widget.onPressedFunction();
     if (!isOpened) {
       _animationController.forward();
@@ -82,55 +77,55 @@ class _MenuButtonState extends State<MenuButton>
   }
 
   Widget getOpenActionContainer(type, icon) {
-
-      return Container(
-        child: FloatingActionButton.extended(
-        heroTag: null,
-        onPressed: () => Navigator.push(
-                        dataContext, 
-                        new MaterialPageRoute(
-                          builder: (BuildContext context) => new CreateForm(type, id)
-                          )),
-        tooltip: 'Create '+type,
-        icon: Icon(icon),
-        label: Text('Create '+type.toString().toUpperCase())
-      ),
+    return Container(
+      child: FloatingActionButton.extended(
+          heroTag: null,
+          onPressed: () => Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (BuildContext context) => new CreateForm(type, widget.id))),
+          tooltip: 'Create ' + type,
+          icon: Icon(icon),
+          label: Text('Create ' + type.toString().toUpperCase())),
     );
   }
 
   Widget getClosedActionContainer(type, icon) {
-      return Container(
+    return Container(
       child: FloatingActionButton(
         heroTag: null,
         onPressed: () => Navigator.push(
-                        dataContext, 
-                        new MaterialPageRoute(
-                          builder: (BuildContext context) => new CreateForm(type, id)
-                          )),
-        tooltip: 'Create '+type,
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => new CreateForm(type, widget.id))),
+        tooltip: 'Create ' + type,
         child: Icon(icon),
       ),
     );
   }
 
-
-
   Widget space() {
-    return isOpened ? getOpenActionContainer("space", Icons.home) : getClosedActionContainer("space", Icons.home);
+    return isOpened
+        ? getOpenActionContainer("space", Icons.home)
+        : getClosedActionContainer("space", Icons.home);
   }
 
   Widget collection() {
-    return isOpened ? getOpenActionContainer("collection", Icons.book) : getClosedActionContainer("collection", Icons.book);
+    return isOpened
+        ? getOpenActionContainer("collection", Icons.book)
+        : getClosedActionContainer("collection", Icons.book);
   }
 
   Widget dataset() {
-    return isOpened ? getOpenActionContainer("dataset", Icons.folder) : getClosedActionContainer("dataset", Icons.folder);
+    return isOpened
+        ? getOpenActionContainer("dataset", Icons.folder)
+        : getClosedActionContainer("dataset", Icons.folder);
   }
 
   Widget toggle() {
     return Container(
       child: FloatingActionButton(
-        heroTag: null,        
+        heroTag: null,
         backgroundColor: _buttonColor.value,
         onPressed: animate,
         tooltip: 'Menu Options',
@@ -145,37 +140,36 @@ class _MenuButtonState extends State<MenuButton>
   @override
   Widget build(BuildContext context) {
     return new Opacity(
-      opacity: 1.0,
-      child: Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        Transform(
-          transform: Matrix4.translationValues(
-            0.0,
-            _translateButton.value * 3.0,
-            0.0,
-          ),
-          child: space(),
-        ),
-        Transform(
-          transform: Matrix4.translationValues(
-            0.0,
-            _translateButton.value * 2.0,
-            0.0,
-          ),
-          child: collection(),
-        ),
-        Transform(
-          transform: Matrix4.translationValues(
-            0.0,
-            _translateButton.value,
-            0.0,
-          ),
-          child: dataset(),
-        ),
-        toggle(),
-      ],
-    )
-    );
+        opacity: 1.0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Transform(
+              transform: Matrix4.translationValues(
+                0.0,
+                _translateButton.value * 3.0,
+                0.0,
+              ),
+              child: space(),
+            ),
+            Transform(
+              transform: Matrix4.translationValues(
+                0.0,
+                _translateButton.value * 2.0,
+                0.0,
+              ),
+              child: collection(),
+            ),
+            Transform(
+              transform: Matrix4.translationValues(
+                0.0,
+                _translateButton.value,
+                0.0,
+              ),
+              child: dataset(),
+            ),
+            toggle(),
+          ],
+        ));
   }
 }

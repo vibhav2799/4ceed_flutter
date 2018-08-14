@@ -1,4 +1,4 @@
-var serverAddress = "http://2b7c6d77.ngrok.io";
+var serverAddress = "http://55bb506d.ngrok.io";
 var userName = "";
 var email = "";
 var auth = "";
