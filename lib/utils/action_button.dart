@@ -66,7 +66,7 @@ class _MenuButtonState extends State<MenuButton>
   }
 
   animate() {
-    print(widget.id);
+    print(widget.type);
     widget.onPressedFunction();
     if (!isOpened) {
       _animationController.forward();
@@ -83,7 +83,8 @@ class _MenuButtonState extends State<MenuButton>
           onPressed: () => Navigator.push(
               context,
               new MaterialPageRoute(
-                  builder: (BuildContext context) => new CreateForm(type, widget.id))),
+                  builder: (BuildContext context) =>
+                      new CreateForm(type, widget.id))),
           tooltip: 'Create ' + type,
           icon: Icon(icon),
           label: Text('Create ' + type.toString().toUpperCase())),
@@ -97,11 +98,33 @@ class _MenuButtonState extends State<MenuButton>
         onPressed: () => Navigator.push(
             context,
             new MaterialPageRoute(
-                builder: (BuildContext context) => new CreateForm(type, widget.id))),
+                builder: (BuildContext context) =>
+                    new CreateForm(type, widget.id))),
         tooltip: 'Create ' + type,
         child: Icon(icon),
       ),
     );
+  }
+
+  Widget getOpenActionContainerForUpload(icon) {
+    return Container(
+      child: FloatingActionButton.extended(
+          heroTag: null,
+          onPressed: () {},
+          tooltip: "Upload Files",
+          icon: Icon(icon),
+          label: Text("Upload Files")),
+    );
+  }
+
+  Widget getClosedActionContainerForUpload(icon) {
+    return Container(
+        child: FloatingActionButton(
+      heroTag: null,
+      onPressed: () => {},
+      tooltip: "Upload Files",
+      child: Icon(icon),
+    ));
   }
 
   Widget space() {
@@ -122,6 +145,12 @@ class _MenuButtonState extends State<MenuButton>
         : getClosedActionContainer("dataset", Icons.folder);
   }
 
+  Widget uploadFiles() {
+    return isOpened
+        ? getOpenActionContainerForUpload(Icons.file_upload)
+        : getClosedActionContainerForUpload(Icons.file_upload);
+  }
+
   Widget toggle() {
     return Container(
       child: FloatingActionButton(
@@ -139,37 +168,47 @@ class _MenuButtonState extends State<MenuButton>
 
   @override
   Widget build(BuildContext context) {
-    return new Opacity(
-        opacity: 1.0,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Transform(
-              transform: Matrix4.translationValues(
-                0.0,
-                _translateButton.value * 3.0,
-                0.0,
+    return new Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: widget.type == null || widget.type != "dataset"
+          ? <Widget>[
+              Transform(
+                transform: Matrix4.translationValues(
+                  0.0,
+                  _translateButton.value * 3.0,
+                  0.0,
+                ),
+                child: space(),
               ),
-              child: space(),
-            ),
-            Transform(
-              transform: Matrix4.translationValues(
-                0.0,
-                _translateButton.value * 2.0,
-                0.0,
+              Transform(
+                transform: Matrix4.translationValues(
+                  0.0,
+                  _translateButton.value * 2.0,
+                  0.0,
+                ),
+                child: collection(),
               ),
-              child: collection(),
-            ),
-            Transform(
-              transform: Matrix4.translationValues(
-                0.0,
-                _translateButton.value,
-                0.0,
+              Transform(
+                transform: Matrix4.translationValues(
+                  0.0,
+                  _translateButton.value,
+                  0.0,
+                ),
+                child: dataset(),
               ),
-              child: dataset(),
-            ),
-            toggle(),
-          ],
-        ));
+              toggle(),
+            ]
+          : <Widget>[
+              Transform(
+                transform: Matrix4.translationValues(
+                  0.0,
+                  _translateButton.value,
+                  0.0,
+                ),
+                child: uploadFiles(),
+              ),
+              toggle(),
+            ],
+    );
   }
 }
