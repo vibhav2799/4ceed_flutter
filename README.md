@@ -1,6 +1,6 @@
-# my_app
+# 4CeeD - Manage your data
 
-A new Flutter project.
+A Flutter app to implement secure data curation service for 4ceed with uploading, previewing and coordinating data hands on.
 
 ## Getting Started
 
