@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../pages/create_new.dart';
+import '../pages/upload_to_dataset.dart';
 import './user_info.dart';
 
 class MenuButton extends StatefulWidget {
@@ -110,7 +111,11 @@ class _MenuButtonState extends State<MenuButton>
     return Container(
       child: FloatingActionButton.extended(
           heroTag: null,
-          onPressed: () {},
+          onPressed: () => Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    new UploadFilesToDataset(widget.id))),
           tooltip: "Upload Files",
           icon: Icon(icon),
           label: Text("Upload Files")),
@@ -121,7 +126,11 @@ class _MenuButtonState extends State<MenuButton>
     return Container(
         child: FloatingActionButton(
       heroTag: null,
-      onPressed: () => {},
+      onPressed: () => Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    new UploadFilesToDataset(widget.id))),
       tooltip: "Upload Files",
       child: Icon(icon),
     ));
