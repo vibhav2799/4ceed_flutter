@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../pages/create_new.dart';
 import '../pages/upload_to_dataset.dart';
-import './user_info.dart';
 
 class MenuButton extends StatefulWidget {
   final BuildContext dataContext;

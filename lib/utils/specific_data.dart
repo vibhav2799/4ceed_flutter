@@ -23,7 +23,6 @@ class SpecificDataState extends State<SpecificData> {
 
 
   Future<String> getData() async {
-
     http.Response response = await http.get(serverAddress+'/api/'+type,
     headers: {
       "Authorization": auth,
@@ -90,7 +89,6 @@ class SpecificDataState extends State<SpecificData> {
                       new MaterialPageRoute(
                         builder: (BuildContext context) => new DisplayData(type.substring(0, type.length - 1).toString(), data["id"])
                         ));
-
               }
             ),
           ],

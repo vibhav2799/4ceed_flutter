@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-//import 'package:open_file/open_file.dart';
+import 'package:open_file/open_file.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import "package:flutter/material.dart";
@@ -64,7 +64,7 @@ class PreviewFile extends StatelessWidget {
     final File file = new File("$_localPath/"+fileName);
     await file.writeAsBytes(response.bodyBytes);
 
-    //OpenFile.open(file.path);
+    OpenFile.open(file.path);
   }
 
   @override

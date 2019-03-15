@@ -47,10 +47,6 @@ class DisplayDataState extends State<DisplayData> {
         data = jsonDecode(response.body);
       }
     });
-    // print(data);
-    // if(data.length == 0) {
-    //   Navigator.of(context).pushNamed('/data-not-found');
-    // }
 
     return "Success";
   }
@@ -62,7 +58,6 @@ class DisplayDataState extends State<DisplayData> {
 
     } else {
       this.getData(givenType, givenId);
-
     }
   }
 
@@ -165,7 +160,7 @@ class DisplayDataState extends State<DisplayData> {
                       return buildCard(data[index]);
                     }),
                   ))),
-      floatingActionButton: new MenuButton(toggle, currentType, currentId, context),
+      floatingActionButton: new MenuButton(toggle, currentType == null ? widget.givenType : currentType, currentId, context),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }

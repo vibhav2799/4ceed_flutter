@@ -85,10 +85,7 @@ class FormBuilderState extends State<FormBuilder> {
                   value: currentSpace),
           Padding(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
-              child: Material(
-                borderRadius: BorderRadius.circular(30.0),
-                elevation: 5.0,
-                child: MaterialButton(
+              child: MaterialButton(
                   minWidth: 200.0,
                   height: 42.0,
                   onPressed: () {
@@ -96,6 +93,7 @@ class FormBuilderState extends State<FormBuilder> {
                       if (type == "space") {
                         createNewSpace();
                       } else if (type == "collection") {
+                        print(id);
                         createNewCollection(id);
                       } else {
                         createNewDataset("", id);
@@ -105,7 +103,7 @@ class FormBuilderState extends State<FormBuilder> {
                   color: Colors.red,
                   child: Text('Submit', style: TextStyle(color: Colors.white)),
                 ),
-              )),
+              ),
           Material(
             borderRadius: BorderRadius.circular(30.0),
             elevation: 5.0,

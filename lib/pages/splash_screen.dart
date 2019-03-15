@@ -9,10 +9,12 @@ class MySplashScreen extends StatefulWidget {
 }
 
 class _MyAppState extends State<MySplashScreen> {
+  // A splash screen widget below which loads for a while before the app runs. Displays 4CeeD logo along with message.
   @override
   Widget build(BuildContext context) {
     return new SplashScreen(
       seconds: 7,
+      // Navigates to SignIn after loading is complete
       navigateAfterSeconds: new SignIn(),
       title: new Text('Welcome to 4CeeD',
       style: new TextStyle(

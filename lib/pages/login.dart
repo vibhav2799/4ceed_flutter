@@ -4,9 +4,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../utils/home_data.dart';
 import '../utils/user_info.dart';
 import 'package:http/http.dart' as http;
-import 'dart:async';
 import 'dart:convert';
 
+// A variable (code retrieved from Google Sign In flutter library) to store scopes targeted in Google Sign In proccess
 final GoogleSignIn _googleSignIn = new GoogleSignIn(
   scopes: <String>[
     'email',
@@ -21,6 +21,7 @@ class SignIn extends StatefulWidget {
 }
 
 class SignInState extends State<SignIn> {
+  // Variables to store user details and flags for login
   GoogleSignInAccount _currentUser;
   String emailText = "", passwordText = "";
   bool isValid = false;
@@ -84,6 +85,7 @@ class SignInState extends State<SignIn> {
     _googleSignIn.disconnect();
   }
 
+  // A widget to allow users to sign in locally/ sign in with Google
   Widget _buildBody() {
     final logo = new Image.asset(
       'images/atom_white.png',
@@ -124,21 +126,18 @@ class SignInState extends State<SignIn> {
 
     final loginButton = new Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
-      child: Material(
-        borderRadius: BorderRadius.circular(30.0),
-        elevation: 5.0,
-        child: MaterialButton(
+      child: MaterialButton(
           minWidth: 200.0,
           height: 42.0,
           onPressed: _handleLocalSignIn,
           color: Colors.red,
           child: Text('Log In', style: TextStyle(color: Colors.white)),
         ),
-      ),
     );
 
+    // A message preventing log in if the user entered Invalid Credentials
     final message = new Text(
-      !isValid && triedLoggingIn
+      triedLoggingIn && !isValid
           ? "Invalid Credentials Entered!"
           : "",
       style:
@@ -150,6 +149,7 @@ class SignInState extends State<SignIn> {
       return new DisplayData('', '');
     } else {
       return Scaffold(
+        resizeToAvoidBottomPadding: false,
         backgroundColor: Colors.black87,
         body: Center(
           child: ListView(
@@ -181,6 +181,7 @@ class SignInState extends State<SignIn> {
     }
   }
 
+  // Main widget which builds the log in page
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
