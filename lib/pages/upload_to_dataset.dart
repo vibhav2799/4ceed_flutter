@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
+import '../utils/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
 class UploadFilesToDataset extends StatefulWidget {
@@ -14,6 +17,20 @@ class UploadFilesToDataset extends StatefulWidget {
 }
 
 
+
+uploadFile(datasetId) async {
+    http.Response response = await http.post(serverAddress + "/api/uploadToDataset/" + datasetId
+        body: json.encode(jsonData),
+        headers: {
+          "Authorization": auth,
+          "Content-Type": "multipart/form-data",
+          "Accept": "application/json",
+        });
+    if (response.statusCode == 200) {
+      print("uploaded")
+    }
+    print(response.body);
+  }
 
 class UploadFilesToDatasetState extends State<UploadFilesToDataset> {
   File _image;
