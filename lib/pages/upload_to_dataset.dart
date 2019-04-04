@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+var jsonData = "";
 
 class UploadFilesToDataset extends StatefulWidget {
 
@@ -16,10 +17,8 @@ class UploadFilesToDataset extends StatefulWidget {
   State createState() => new UploadFilesToDatasetState();
 }
 
-
-
-uploadFile(datasetId) async {
-    http.Response response = await http.post(serverAddress + "/api/uploadToDataset/" + datasetId
+void uploadFile(datasetId) async {
+    http.Response response = await http.post(serverAddress + "/api/uploadToDataset/" + datasetId,
         body: json.encode(jsonData),
         headers: {
           "Authorization": auth,
@@ -27,7 +26,7 @@ uploadFile(datasetId) async {
           "Accept": "application/json",
         });
     if (response.statusCode == 200) {
-      print("uploaded")
+      print("uploaded");
     }
     print(response.body);
   }
@@ -57,9 +56,9 @@ class UploadFilesToDatasetState extends State<UploadFilesToDataset> {
       ), MaterialButton(
           minWidth: 200.0,
           height: 42.0,
-          onPressed: null,
           color: Colors.red,
           child: Text('Upload', style: TextStyle(color: Colors.white)),
+          onPressed: () => uploadFile("abc"),
         )]),
       floatingActionButton: new FloatingActionButton(
         onPressed: getImage,
@@ -68,6 +67,4 @@ class UploadFilesToDatasetState extends State<UploadFilesToDataset> {
       ),
     );
   }
- 
-
 }
