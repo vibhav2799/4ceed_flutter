@@ -3,8 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 
 class UploadFilesToDataset extends StatefulWidget {
@@ -14,6 +12,8 @@ class UploadFilesToDataset extends StatefulWidget {
 
   State createState() => new UploadFilesToDatasetState();
 }
+
+
 
 class UploadFilesToDatasetState extends State<UploadFilesToDataset> {
   File _image;
@@ -40,7 +40,7 @@ class UploadFilesToDatasetState extends State<UploadFilesToDataset> {
       ), MaterialButton(
           minWidth: 200.0,
           height: 42.0,
-          onPressed: () {uploadToDataset();},
+          onPressed: null,
           color: Colors.red,
           child: Text('Upload', style: TextStyle(color: Colors.white)),
         )]),
@@ -51,21 +51,6 @@ class UploadFilesToDatasetState extends State<UploadFilesToDataset> {
       ),
     );
   }
-  uploadToDataset() async {
-    http.Response response = await http.post(serverAddress + "/api/spaces",
-        body: json.encode({
-          "name": nameController.text,
-          "description": descriptionController.text
-        }),
-        headers: {
-          "Authorization": auth,
-          "Content-Type": "application/json; charset=utf-8",
-          "Accept": "application/json",
-        });
-    if (response.statusCode == 200) {
-      Navigator.pushNamed(context, '/home');
-    }
-
-  }
+ 
 
 }
