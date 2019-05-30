@@ -1,4 +1,5 @@
-var serverAddress = "http://85a5bdb9.ngrok.io";
+//TODO: change Server Address
+var serverAddress = "http://localhost:9000";
 var userName = "";
 var email = "";
 var auth = "";
