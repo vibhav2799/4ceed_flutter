@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import '../utils/user_info.dart';
 import '../utils/form.dart';
+import '../utils/dataset_form.dart';
 
-class CreateForm extends StatelessWidget {
+class CreateDatasetForm extends StatelessWidget {
   final String type;
   final String id;
-  CreateForm(this.type, this.id);
+  CreateDatasetForm(this.type, this.id);
 
   String getText(String type) {
     if (type == "space") {
@@ -59,7 +60,7 @@ class CreateForm extends StatelessWidget {
                         fontStyle: FontStyle.italic,
                       )),
                   new Padding(padding: EdgeInsets.only(top: 20.0)),
-                  FormBuilder(type, id),
+                  DatasetFormBuilder(id),
                 ]))));
   }
 }
