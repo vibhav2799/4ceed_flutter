@@ -91,12 +91,15 @@ class FormBuilderState extends State<FormBuilder> {
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
                       if (type == "space") {
+                        print("form.dart, type is space, create new space");
                         createNewSpace();
                       } else if (type == "collection") {
+                        print("form.dart, type is collection, create new collection");
                         print(id);
                         createNewCollection(id);
                       } else {
-                        createNewDataset("", id);
+                        print("form.dart, type is dataset, create new dataset");
+                        createNewDatasetInSpace(id);
                       }
                     }
                   },
@@ -212,6 +215,80 @@ class FormBuilderState extends State<FormBuilder> {
       "description": descriptionController.text
       });
     
+    }
+    print("COLL ID: "+collId);
+
+    http.Response response = await http.post(
+        serverAddress + "/api/datasets/createempty",
+        body: jsonData,
+        headers: {
+          "Authorization": auth,
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        });
+
+    if (response.statusCode == 200) {
+      Navigator.pushNamed(context, '/home');
+    }
+    print(response.body);
+  }
+
+  // Creates a new dataset under a space/collection/root
+  // param : spaceId (optional), collId (optional)
+  createNewDatasetInSpace(spaceId) async {
+    List<String> spaceList = new List(), collList = new List();
+    spaceList.add(spaceId);
+    var jsonData;
+
+    if (spaceId.length > 0) {
+      jsonData = json.encode({
+        "name": nameController.text,
+        "description": descriptionController.text,
+        "space": spaceList
+      });
+    } else {
+      jsonData = json.encode({
+        "name": nameController.text,
+        "description": descriptionController.text
+      });
+
+    }
+    print("SPACE ID: "+ spaceId);
+
+    http.Response response = await http.post(
+        serverAddress + "/api/datasets/createempty",
+        body: jsonData,
+        headers: {
+          "Authorization": auth,
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        });
+
+    if (response.statusCode == 200) {
+      Navigator.pushNamed(context, '/home');
+    }
+    print(response.body);
+  }
+
+  // Creates a new dataset under a space/collection/root
+  // param : spaceId (optional), collId (optional)
+  createNewDatasetInCollection(collId) async {
+    List<String>  collList = new List();
+    collList.add(collId);
+    var jsonData;
+
+   if (collId.length > 0) {
+      jsonData = json.encode({
+        "name": nameController.text,
+        "description": descriptionController.text,
+        "collection": collList
+      });
+    } else {
+      jsonData = json.encode({
+        "name": nameController.text,
+        "description": descriptionController.text
+      });
+
     }
     print("COLL ID: "+collId);
 

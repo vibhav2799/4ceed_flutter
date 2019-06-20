@@ -7,6 +7,7 @@ import './pages/empty.dart';
 
 // Main controller to run 4ceed_app
 void main() {
+  print('starting app');
   runApp(
     new App()
   );
