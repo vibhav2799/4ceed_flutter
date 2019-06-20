@@ -191,6 +191,33 @@ class FormBuilderState extends State<FormBuilder> {
 
   // Creates a new dataset under a space/collection/root
   // param : spaceId (optional), collId (optional)
+  createNewDatasetOnly() async {
+
+    var jsonData;
+
+
+    jsonData = json.encode({
+      "name": nameController.text,
+      "description": descriptionController.text
+    });
+
+    http.Response response = await http.post(
+        serverAddress + "/api/datasets/createempty",
+        body: jsonData,
+        headers: {
+          "Authorization": auth,
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        });
+
+    if (response.statusCode == 200) {
+      Navigator.pushNamed(context, '/home');
+    }
+    print(response.body);
+  }
+
+  // Creates a new dataset under a space/collection/root
+  // param : spaceId (optional), collId (optional)
   createNewDataset(spaceId, collId) async {
     List<String> spaceList = new List(), collList = new List();
     spaceList.add(spaceId);
@@ -236,7 +263,7 @@ class FormBuilderState extends State<FormBuilder> {
   // Creates a new dataset under a space/collection/root
   // param : spaceId (optional), collId (optional)
   createNewDatasetInSpace(spaceId) async {
-    List<String> spaceList = new List(), collList = new List();
+    List<String> spaceList = new List();
     spaceList.add(spaceId);
     var jsonData;
 
