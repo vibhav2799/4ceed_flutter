@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../pages/create_new.dart';
+import '../pages/create_new_space.dart';
 import '../pages/upload_to_dataset.dart';
 
 class MenuButton extends StatefulWidget {
@@ -77,19 +78,35 @@ class _MenuButtonState extends State<MenuButton>
   }
 
   Widget getOpenActionContainer(type, icon) {
-    return Container(
-      child: FloatingActionButton.extended(
-          heroTag: null,
-          onPressed: () => Navigator.push(
-              context,
-              new MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      new CreateForm(type, widget.id))),
-          tooltip: 'Create ' + type,
-          icon: Icon(icon),
-          label: Text('Create ' + type.toString().toUpperCase())),
-    );
-  }
+    if (type == "space"){
+      return Container(
+        child: FloatingActionButton.extended(
+            heroTag: null,
+            onPressed: () => Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                    new CreateFormSpace(widget.id))),
+            tooltip: 'Create ' + type,
+            icon: Icon(icon),
+            label: Text('Create ' + type.toString().toUpperCase())),
+      );
+    } else {
+      return Container(
+        child: FloatingActionButton.extended(
+            heroTag: null,
+            onPressed: () => Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                    new CreateForm(type, widget.id))),
+            tooltip: 'Create ' + type,
+            icon: Icon(icon),
+            label: Text('Create ' + type.toString().toUpperCase())),
+        );
+      }
+    }
+
 
   Widget getClosedActionContainer(type, icon) {
     return Container(
