@@ -1,6 +1,6 @@
 # 4CeeD - Manage your data
 
-A Flutter app to implement secure data curation service for [4CeeD](https://4ceed.github.io) with uploading, previewing and coordinating data hands on.
+Migrated to https://github.com/clowder-framework/clowder_mobile_app. A Flutter app to implement secure data curation service for [4CeeD](https://4ceed.github.io) with uploading, previewing and coordinating data hands on. 
 
 ## Getting Started
 
